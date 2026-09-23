@@ -1,0 +1,12 @@
+{
+  "name": "mmm-mirror-assistant",
+  "version": "0.1.0",
+  "description": "A voice-controlled AI assistant module for MagicMirror².",
+  "private": true,
+  "scripts": {
+    "check": "node --check MMM-MirrorAssistant.js"
+  },
+  "engines": {
+    "node": ">=22.22.2 <23 || >=24"
+  }
+}
