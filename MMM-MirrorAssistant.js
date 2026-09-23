@@ -17,7 +17,7 @@ Module.register("MMM-MirrorAssistant", {
 
   getDom() {
     const wrapper = document.createElement("section");
-    wrapper.className = `mirror-assistant mirror-assistant--${this.state}`;
+    wrapper.className = `mirror-assistant mirror-assistant--${this.state}`; //allows for different appear based on state
 
     const response = document.createElement("p");
     response.className = "mirror-assistant__response";
