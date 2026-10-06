@@ -4,7 +4,7 @@
   "description": "A voice-controlled AI assistant module for MagicMirror².",
   "private": true,
   "scripts": {
-    "check": "node --check MMM-MirrorAssistant.js"
+    "check": "node --check MMM-MirrorAssistant.js && node --check pomodoro.js"
   },
   "engines": {
     "node": ">=22.22.2 <23 || >=24"
