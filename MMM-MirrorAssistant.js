@@ -3,6 +3,7 @@
 Module.register("MMM-MirrorAssistant", {
   defaults: {
     idleMessage: "Ready",
+    backendUrl: "http://127.0.0.1:5001",
 
     pomodoroEnabled: true,
     focusMinutes: 25,
@@ -211,6 +212,50 @@ Module.register("MMM-MirrorAssistant", {
     }
 
     return wrapper;
+  },
+
+  async askAssistant(question) {
+    const cleanedQuestion = typeof question === "string" ? question.trim() : "";
+
+    if (!cleanedQuestion) {
+      this.notificationReceived("MIRROR_ASSISTANT_STATE", {
+        state: "error",
+        response: "Please ask a question.",
+      });
+      return;
+    }
+
+    this.notificationReceived("MIRROR_ASSISTANT_STATE", {
+      state: "thinking",
+      question: cleanedQuestion,
+    });
+
+    try {
+      const response = await fetch(`${this.config.backendUrl}/api/assistant`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ question: cleanedQuestion }),
+      });
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Assistant request failed");
+      }
+
+      this.notificationReceived("MIRROR_ASSISTANT_STATE", {
+        state: "speaking",
+        question: cleanedQuestion,
+        response: result.answer,
+      });
+    } catch (error) {
+      console.error("Mirror assistant request failed:", error);
+      this.notificationReceived("MIRROR_ASSISTANT_STATE", {
+        state: "offline",
+        response: "The assistant is unavailable right now.",
+      });
+    }
   },
 
   notificationReceived(notification, payload) {
