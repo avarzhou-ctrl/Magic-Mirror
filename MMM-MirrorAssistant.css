@@ -1,36 +1,286 @@
-remote.mirror-assistant {
-  width: min(80vw, 900px);
+.mirror-assistant {
+  --assistant-primary: var(--color-text-bright, #fff);
+  --assistant-secondary: var(--color-text, #e6e6e6);
+  --assistant-muted: var(--color-text-dimmed, #a7a7a7);
+  --assistant-accent: #dceeff;
+  --assistant-warning: #ffd6ad;
+  width: min(72vw, 840px);
+  margin: 0 auto;
+  display: grid;
+  justify-items: center;
   text-align: center;
 }
 
-.mirror-assistant__question {
-  margin: 0 0 1rem;
-  color: #aaa;
-  font-size: clamp(1rem, 2vw, 1.5rem);
+.mirror-assistant__signal {
+  position: relative;
+  width: 2.7rem;
+  height: 2.7rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  border: 2px solid var(--assistant-secondary);
+  border-radius: 50%;
 }
 
-.mirror-assistant__response {
-  margin: 0;
-  color: #f5f5f5;
-  font-size: clamp(1.5rem, 3vw, 2.5rem);
-  line-height: 1.35;
+.mirror-assistant__signal span {
+  display: none;
+  width: 0.32rem;
+  height: 0.32rem;
+  border-radius: 50%;
+  background: currentColor;
 }
 
 .mirror-assistant__status {
-  margin: 1.25rem 0 0;
-  color: #888;
-  font-size: 0.85rem;
-  letter-spacing: 0.18em;
+  margin: 0;
+  color: var(--assistant-secondary);
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
   text-transform: uppercase;
+}
+
+.mirror-assistant__question {
+  max-width: 44ch;
+  margin: 2rem 0 0;
+  color: var(--assistant-muted);
+  font-size: clamp(1.15rem, 1.8vw, 1.55rem);
+  line-height: 1.4;
+}
+
+.mirror-assistant__question::before {
+  content: "“";
+}
+
+.mirror-assistant__question::after {
+  content: "”";
+}
+
+.mirror-assistant__response {
+  max-width: 30ch;
+  margin: 1.1rem 0 0;
+  color: var(--assistant-primary);
+  font-size: clamp(1.75rem, 3vw, 3rem);
+  font-weight: 300;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+/* Idle is deliberately small so the mirror feels calm when it is not in use. */
+.mirror-assistant--idle .mirror-assistant__signal {
+  width: 0.55rem;
+  height: 0.55rem;
+  margin-bottom: 0.85rem;
+  border: 0;
+  background: var(--assistant-secondary);
+  animation: assistant-breathe 4s ease-in-out infinite;
+}
+
+.mirror-assistant--idle .mirror-assistant__status {
+  color: var(--assistant-muted);
+  font-size: clamp(0.9rem, 1.2vw, 1.05rem);
+}
+
+.mirror-assistant--listening .mirror-assistant__signal {
+  color: var(--assistant-accent);
+  border-color: var(--assistant-accent);
+  animation: assistant-listen 1.8s ease-out infinite;
 }
 
 .mirror-assistant--listening .mirror-assistant__status,
 .mirror-assistant--thinking .mirror-assistant__status,
 .mirror-assistant--speaking .mirror-assistant__status {
-  color: #ddd;
+  color: var(--assistant-primary);
+}
+
+.mirror-assistant--thinking .mirror-assistant__signal {
+  color: var(--assistant-primary);
+  border-color: transparent;
+}
+
+.mirror-assistant--thinking .mirror-assistant__signal span,
+.mirror-assistant--speaking .mirror-assistant__signal span {
+  display: block;
+}
+
+.mirror-assistant--thinking .mirror-assistant__signal span {
+  animation: assistant-think 1.2s ease-in-out infinite;
+}
+
+.mirror-assistant--thinking .mirror-assistant__signal span:nth-child(2),
+.mirror-assistant--speaking .mirror-assistant__signal span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.mirror-assistant--thinking .mirror-assistant__signal span:nth-child(3),
+.mirror-assistant--speaking .mirror-assistant__signal span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.mirror-assistant--speaking .mirror-assistant__signal {
+  height: 2.2rem;
+  color: var(--assistant-primary);
+  border-color: transparent;
+}
+
+.mirror-assistant--speaking .mirror-assistant__signal span {
+  width: 0.2rem;
+  height: 1.3rem;
+  border-radius: 1rem;
+  animation: assistant-speak 0.9s ease-in-out infinite alternate;
+}
+
+.mirror-assistant--offline .mirror-assistant__signal,
+.mirror-assistant--error .mirror-assistant__signal {
+  border-color: var(--assistant-warning);
+}
+
+.mirror-assistant--offline .mirror-assistant__signal::after,
+.mirror-assistant--error .mirror-assistant__signal::after {
+  width: 65%;
+  height: 2px;
+  background: var(--assistant-warning);
+  content: "";
+  transform: rotate(-45deg);
 }
 
 .mirror-assistant--offline .mirror-assistant__status,
 .mirror-assistant--error .mirror-assistant__status {
-  color: #bbb;
+  color: var(--assistant-warning);
+}
+
+/* Pomodoro replaces the idle prompt instead of competing with it. */
+.mirror-assistant__pomodoro {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.mirror-assistant__pomodoro-phase {
+  margin: 0 0 0.4rem;
+  color: var(--assistant-secondary);
+  font-size: clamp(1rem, 1.6vw, 1.3rem);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.mirror-assistant__pomodoro-time {
+  margin: 0;
+  color: var(--assistant-primary);
+  font-family: var(--font-secondary, sans-serif);
+  font-size: clamp(5rem, 10vw, 8.5rem);
+  font-weight: 100;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+}
+
+.mirror-assistant__pomodoro-progress {
+  margin-top: 1.3rem;
+  display: flex;
+  gap: 0.65rem;
+}
+
+.mirror-assistant__pomodoro-dot {
+  width: 0.42rem;
+  height: 0.42rem;
+  border: 1px solid var(--assistant-muted);
+  border-radius: 50%;
+}
+
+.mirror-assistant__pomodoro-dot--complete {
+  border-color: var(--assistant-muted);
+  background: var(--assistant-muted);
+}
+
+.mirror-assistant__pomodoro-dot--current {
+  border-color: var(--assistant-primary);
+  background: var(--assistant-primary);
+  transform: scale(1.35);
+}
+
+.mirror-assistant__pomodoro-state {
+  margin: 0.75rem 0 0;
+  color: var(--assistant-muted);
+  font-size: clamp(0.85rem, 1.2vw, 1rem);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.mirror-assistant__pomodoro-notice {
+  margin: 1.4rem 0 0;
+  color: var(--assistant-secondary);
+  font-size: clamp(1.1rem, 1.8vw, 1.45rem);
+}
+
+@keyframes assistant-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.85);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes assistant-listen {
+  0% {
+    box-shadow: 0 0 0 0 rgb(220 238 255 / 35%);
+  }
+
+  75%,
+  100% {
+    box-shadow: 0 0 0 0.75rem rgb(220 238 255 / 0%);
+  }
+}
+
+@keyframes assistant-think {
+  0%,
+  60%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+
+  30% {
+    opacity: 1;
+    transform: translateY(-0.25rem);
+  }
+}
+
+@keyframes assistant-speak {
+  from {
+    transform: scaleY(0.35);
+  }
+
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@media (max-width: 900px), (max-height: 650px) {
+  .mirror-assistant {
+    width: min(82vw, 700px);
+  }
+
+  .mirror-assistant__question {
+    margin-top: 1.4rem;
+  }
+
+  .mirror-assistant__response {
+    font-size: clamp(1.55rem, 3.5vw, 2.4rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mirror-assistant *,
+  .mirror-assistant *::before,
+  .mirror-assistant *::after {
+    animation: none !important;
+  }
 }

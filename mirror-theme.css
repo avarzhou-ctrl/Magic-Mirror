@@ -1,0 +1,188 @@
+/*
+ * High-contrast theme for viewing MagicMirror through two-way mirror acrylic.
+ * Keep the background truly black: translucent panels and shadows become
+ * visible rectangles once they are reflected by the mirror.
+ */
+:root {
+  --color-background: #000;
+  --color-text-bright: #fff;
+  --color-text: #e6e6e6;
+  --color-text-dimmed: #a7a7a7;
+  --font-size: 18px;
+  --gap-body-top: clamp(28px, 5vh, 58px);
+  --gap-body-right: clamp(28px, 4vw, 64px);
+  --gap-body-bottom: clamp(28px, 5vh, 58px);
+  --gap-body-left: clamp(28px, 4vw, 64px);
+  --gap-modules: clamp(22px, 3vh, 34px);
+}
+
+html,
+body {
+  background: #000;
+  cursor: none;
+}
+
+body {
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricprecision;
+}
+
+header {
+  margin-bottom: 0.7rem;
+  padding: 0;
+  border: 0;
+  color: var(--color-text-dimmed);
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  line-height: 1.25;
+}
+
+.region.top.left,
+.region.top.right {
+  width: min(31vw, 410px);
+}
+
+/* Clock: the time anchors the screen; the date is supporting information. */
+.module.clock .digital {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.module.clock .time {
+  grid-row: 1;
+  color: var(--color-text-bright);
+  font-family: var(--font-secondary), sans-serif;
+  font-size: clamp(3.8rem, 6vw, 5.8rem);
+  font-weight: 100;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+}
+
+.module.clock .date {
+  grid-row: 2;
+  color: var(--color-text);
+  font-size: clamp(1rem, 1.5vw, 1.3rem);
+  font-weight: 300;
+  letter-spacing: 0.025em;
+  line-height: 1.2;
+}
+
+.module.clock .clock-second-digital {
+  display: none;
+}
+
+/* Calendar: one clean information row rather than a boxed widget. */
+.module.calendar table {
+  font-size: clamp(0.95rem, 1.25vw, 1.1rem);
+}
+
+.module.calendar td {
+  padding-top: 0.35rem;
+  padding-bottom: 0.35rem;
+  vertical-align: middle;
+}
+
+.module.calendar .symbol {
+  color: var(--color-text-dimmed);
+}
+
+.module.calendar .title {
+  padding-right: 0.75rem;
+  color: var(--color-text);
+}
+
+.module.calendar .time {
+  color: var(--color-text-dimmed);
+}
+
+/* Weather: strong temperatures, quiet labels, tighter forecast rhythm. */
+.module.weather .module-content {
+  font-variant-numeric: tabular-nums;
+}
+
+.module.weather .currentweather .large,
+.module.weather .type-temp {
+  color: var(--color-text-bright);
+}
+
+.module.weather .weathericon,
+.module.weather .weather-icon {
+  color: var(--color-text);
+}
+
+.module.weather table {
+  border-spacing: 0 0.35rem;
+}
+
+.module.weather td {
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+}
+
+.module.weather .day {
+  padding-right: 1.2rem;
+  color: var(--color-text);
+}
+
+.module.weather .weather-icon {
+  padding-right: 1.2rem;
+}
+
+.module.weather .min-temp {
+  padding-left: 1rem;
+  color: var(--color-text-dimmed);
+}
+
+.module.weather tr.colored .max-temp,
+.module.weather tr.colored .min-temp {
+  color: inherit;
+}
+
+/* Prevent edge information from visually competing with an active answer. */
+.region.middle.center {
+  width: calc(100% - min(18vw, 180px));
+  pointer-events: none;
+}
+
+@media (max-width: 900px), (max-height: 650px) {
+  :root {
+    --font-size: 16px;
+    --gap-body-top: 26px;
+    --gap-body-right: 28px;
+    --gap-body-bottom: 26px;
+    --gap-body-left: 28px;
+    --gap-modules: 20px;
+  }
+
+  .region.top.left,
+  .region.top.right {
+    width: min(42vw, 360px);
+  }
+
+  .module.clock .time {
+    font-size: clamp(3.2rem, 8vw, 4.6rem);
+  }
+
+  .module.weather .weather-icon,
+  .module.weather .day {
+    padding-right: 0.7rem;
+  }
+
+  .module.weather .min-temp {
+    padding-left: 0.65rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

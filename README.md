@@ -54,6 +54,9 @@ Restart MagicMirror² after pulling the changes.
 
 - `MMM-MirrorAssistant.js` is the MagicMirror² browser module.
 - `MMM-MirrorAssistant.css` contains the mirror-friendly visual styles.
+- `mirror-theme.css` gives the built-in clock, calendar, and weather modules a
+  matching high-contrast appearance. It is loaded automatically by the
+  assistant module.
 - `package.json` records Node.js compatibility and JavaScript checks.
 - `requirements.txt` currently supports only the legacy Flask prototype in
   `app.py`; MagicMirror² does not install Python packages from this file.
@@ -63,3 +66,7 @@ Run the JavaScript syntax check with:
 ```bash
 npm run check
 ```
+
+The interface uses pure black and intentionally bright secondary text because
+two-way mirror acrylic reduces display brightness and contrast. Test the final
+brightness on the real display after the acrylic is installed.
